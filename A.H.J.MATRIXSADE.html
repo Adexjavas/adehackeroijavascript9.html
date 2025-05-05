@@ -1,0 +1,56 @@
+<script>
+    // Matrix-koodisade
+    const canvas = document.getElementById('matrix');
+    const ctx = canvas.getContext('2d');
+    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth;
+    const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const fontSize = 14;
+    const columns = canvas.width / fontSize;
+    const drops = [];
+    for (let x = 0; x < columns; x++) drops[x] = 1;
+    function draw() {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.05)'; /* Häivytys taustalle */
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#0F0'; /* Vihreä väri */
+        ctx.font = fontSize + 'px monospace';
+        for (let i = 0; i < drops.length; i++) {
+            const text = chars.charAt(Math.floor(Math.random() * chars.length));
+            ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+            if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+            drops[i]++;
+        }
+    }
+    setInterval(draw, 33); /* Päivittää 30 fps */
+
+    // Kirjoitusefekti viestille
+    function typeWriter(elementId, text, speed, startDelay, cursorId) {
+        let i = 0;
+        const element = document.getElementById(elementId);
+        // Lisää kursori
+        const cursor = document.createElement('span');
+        cursor.id = cursorId;
+        cursor.className = 'cursor';
+        element.appendChild(cursor);
+
+        setTimeout(() => {
+            const interval = setInterval(() => {
+                if (i < text.length) {
+                    // Lisää kirjain ja säilytä kursori lopussa
+                    element.innerHTML = text.substring(0, i + 1);
+                    element.appendChild(cursor);
+                    i++;
+                } else {
+                    // Poista kursori, kun rivi on valmis
+                    cursor.remove();
+                    clearInterval(interval);
+                }
+            }, speed);
+        }, startDelay);
+    }
+
+    // Kirjoita rivit yksitellen
+    typeWriter('line1', 'Moro! Täällä Aatu!', 50, 1000, 'cursor1');
+    typeWriter('line2', 'Opin juuri miten murtaudutaan toisen tietokoneelle/puhelimeen!', 50, 2000, 'cursor2');
+    typeWriter('line3', 'Just kidding! Tää on vaan hauska viesti! :D', 50, 3500, 'cursor3');
+</script>
