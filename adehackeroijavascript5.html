@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hakkeriviesti</title>
+    <style>
+        body {
+            background-color: #000;
+            color: #00ff00; /* Kirkkaampi vihreä, kuten terminaalissa */
+            font-family: 'Menlo', 'Consolas', 'Courier New', monospace; /* iPhone-tyylinen fontti */
+            font-size: 18px; /* Pienempi, terminaalimainen koko */
+            line-height: 1.4; /* Tiukempi riviväli */
+            text-align: left; /* Terminaalit ovat yleensä vasemmalle tasattuja */
+            padding: 20px; /* Pieni marginaali reunoille */
+            text-shadow: 0 0 5px rgba(0, 255, 0, 0.5); /* Kevyt hehku */
+        }
+        .terminal {
+            max-width: 800px; /* Rajoitettu leveys, kuten terminaali-ikkuna */
+            margin: 0 auto; /* Keskitetään */
+        }
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 20px;
+            background-color: #00ff00;
+            vertical-align: middle;
+            animation: blink 0.7s step-end infinite; /* Vilkkuu 0,7 s välein */
+        }
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="terminal">
+        <h1 id="line1"></h1>
+        <h2 id="line2"></h2>
+        <h2 id="line3"></h2>
+    </div>
+
+    <script>
+        function typeWriter(elementId, text, speed, startDelay, cursorId) {
+            let i = 0;
+            const element = document.getElementById(elementId);
+            // Lisää kursori
+            const cursor = document.createElement('span');
+            cursor.id = cursorId;
+            cursor.className = 'cursor';
+            element.appendChild(cursor);
+
+            setTimeout(() => {
+                const interval = setInterval(() => {
+                    if (i < text.length) {
+                        // Lisää kirjain ja säilytä kursori lopussa
+                        element.innerHTML = text.substring(0, i + 1);
+                        element.appendChild(cursor);
+                        i++;
+                    } else {
+                        // Poista kursori, kun rivi on valmis
+                        cursor.remove();
+                        clearInterval(interval);
+                    }
+                }, speed);
+            }, startDelay);
+        }
+
+        // Kirjoita rivit yksitellen
+        typeWriter('line1', 'Moro! Täällä Ade!', 25, 1000, 'cursor1');
+        typeWriter('line2', 'Opin juuri miten murtaudutaan toisen ios iphonelle!', 25, 2000, 'cursor2');
+        typeWriter('line3', 'Just kidding!  :D', 25, 3500, 'cursor3');
+    </script>
+</body>
+</html>
